@@ -1,22 +1,69 @@
 let gameComplete = false;
-// Define the three constants here
 
-// Define the player object here
+const name = 'unknown'
+const score = 0
+const items = 0
 
-// Define the Product class - write the Constructor function for Product class here
+const player = {
+    name,
+    score,
+    items,
+    getCurrentScore() {
+        return this.score
+    },
+    addPoints(points) {
+        this.score = this.score + points
+    },
+    deductPoints(points) {
+        this.score = this.score - points
+    }
+}
 
-// Complete the dateDiff function
-const dateDiff = (date1, date2) => {};
+function Product(id, name, price, expiryDate) {
+    this.id = id;
+    this.name = name;
+    this.price = price;
+    this.expiryDate = expiryDate;
+}
 
-// Here, use Object.defineProperty to create property - daysToExpire
+const dateDiff = (date1, date2) => {
+    return Math.floor((date1 - date2) / 86400000)
+};
 
-// Add method getDetails to Product here
+Object.defineProperty(Product.prototype, 'daysToExpire', {get: function() {
+    return dateDiff(this.expiryDate, new Date())
+}})
 
-// Define the MagicProduct class here
+Product.prototype.getDetails = function() {
+    return `Product Name: ${this.name} , Product Price: ${this.price}`
+};
 
-// Establish inheritance between Product() & MagicProduct() here
+function MagicProduct(id, name, price, expiryDate, points, isBonus) {
+    Product.call(this, id, name, price, expiryDate)
+    this.points = points;
+    this.isBonus = isBonus;
+}
 
-// Define Rating class here
+MagicProduct.prototype = Object.create(Product.prototype)
+
+class Rating {
+    constructor() {
+        this.rate = ''
+    }
+
+    set rating(value) {
+        if (value > 1 && value <= 4) {
+            this.rate = 'OK'
+        } else if (value >= 5 && value <= 7) {
+            this.rate = 'GOOD'
+        } else if (value > 7) {
+            this.rate = 'EXCEPTIONAL'
+        } else {
+            this.rate = 'BAD'
+        }
+    }
+
+}
 
 // Complete the loadProducts function
 const loadProducts = (map, prodId) => {
@@ -318,8 +365,10 @@ function init(data) {
 
 
 
+const { get } = require("http");
     ///////////////////////////////////////////////////////////////
     const readline = require("readline");
+const { callbackify } = require("util");
     require('colors');
     const rl = readline.createInterface({
         input: process.stdin,
